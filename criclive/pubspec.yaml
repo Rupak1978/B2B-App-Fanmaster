@@ -1,0 +1,41 @@
+name: criclive
+description: "CricLive - Live Scoring & Stats for local cricket matches and tournaments"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  provider: ^6.1.1
+  sqflite: ^2.3.2
+  path_provider: ^2.1.2
+  path: ^1.9.0
+  web_socket_channel: ^2.4.4
+  speech_to_text: ^6.6.0
+  share_plus: ^7.2.2
+  vibration: ^1.8.4
+  intl: ^0.19.0
+  uuid: ^4.3.3
+  http: ^1.2.1
+  json_annotation: ^4.8.1
+  equatable: ^2.0.5
+  flutter_animate: ^4.5.0
+  google_fonts: ^6.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  build_runner: ^2.4.8
+  json_serializable: ^6.7.1
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: CricLive
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
