@@ -1,6 +1,7 @@
 import '../models/ball_event.dart';
 import '../models/innings.dart';
 import '../models/match.dart';
+import '../models/team.dart';
 import '../models/tournament.dart';
 import '../utils/enums.dart';
 
@@ -400,8 +401,8 @@ class StatsCalculator {
     return innings.oversAsDecimal;
   }
 
-  static _makeTeam(String id, String name) {
-    return __SimpleTeam(id: id, name: name);
+  static Team _makeTeam(String id, String name) {
+    return Team(id: id, name: name);
   }
 
   static String _describeDismissal(BallEvent ball) {
@@ -424,11 +425,4 @@ class StatsCalculator {
         return '';
     }
   }
-}
-
-/// Minimal team for standings (avoids circular dependency).
-class __SimpleTeam {
-  final String id;
-  final String name;
-  const __SimpleTeam({required this.id, required this.name});
 }

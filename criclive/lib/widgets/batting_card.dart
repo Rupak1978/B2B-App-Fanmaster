@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/innings.dart';
 import '../services/stats_calculator.dart';
 import '../utils/constants.dart';
+import '../utils/enums.dart';
 
 /// Batting scorecard showing all batsmen stats.
 class BattingCard extends StatelessWidget {
@@ -145,11 +146,16 @@ class BattingCard extends StatelessWidget {
     int wides = 0, noBalls = 0, byes = 0, legByes = 0;
     for (final ball in innings.ballEvents) {
       switch (ball.extraType) {
-        case _:
-          if (ball.extraType.index == 1) wides += ball.extraRuns;
-          if (ball.extraType.index == 2) noBalls += ball.extraRuns;
-          if (ball.extraType.index == 3) byes += ball.runsOffBat;
-          if (ball.extraType.index == 4) legByes += ball.runsOffBat;
+        case ExtraType.wide:
+          wides += ball.extraRuns;
+        case ExtraType.noBall:
+          noBalls += ball.extraRuns;
+        case ExtraType.bye:
+          byes += ball.runsOffBat;
+        case ExtraType.legBye:
+          legByes += ball.runsOffBat;
+        case ExtraType.none:
+          break;
       }
     }
     final total = wides + noBalls + byes + legByes;
