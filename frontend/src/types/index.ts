@@ -1,7 +1,32 @@
+export interface MatchRules {
+  overs: number;
+  balls_per_over: number;
+  players_per_side: number;
+  powerplay_overs: number;
+  wide_runs: number;
+  no_ball_free_hit: boolean;
+  bouncer_limit: number;
+  last_man_stands: boolean;
+  super_over: boolean;
+}
+
+export const DEFAULT_RULES: MatchRules = {
+  overs: 10,
+  balls_per_over: 6,
+  players_per_side: 6,
+  powerplay_overs: 0,
+  wide_runs: 1,
+  no_ball_free_hit: false,
+  bouncer_limit: 0,
+  last_man_stands: false,
+  super_over: false,
+};
+
 export interface Tournament {
   id: number;
+  user_id: string;
   name: string;
-  format: 'T20' | 'ODI' | 'Test';
+  format: 'T20' | 'ODI' | 'Test' | 'Custom';
   tournament_type: 'League' | 'Knockout' | 'Round Robin';
   start_date: string;
   venue: string;
@@ -14,6 +39,7 @@ export interface Tournament {
 
 export interface Team {
   id: number;
+  user_id: string;
   name: string;
   tournament_id: number | null;
   created_at: string;
@@ -22,6 +48,7 @@ export interface Team {
 
 export interface Player {
   id: number;
+  user_id: string;
   name: string;
   team_id: number | null;
   team_name?: string;
@@ -31,12 +58,14 @@ export interface Player {
 
 export interface Match {
   id: number;
+  user_id: string;
   tournament_id: number | null;
   team1_id: number;
   team2_id: number;
   team1_name?: string;
   team2_name?: string;
   overs: number;
+  rules: MatchRules;
   venue: string;
   toss_winner_id: number | null;
   toss_winner_name?: string;
@@ -61,11 +90,24 @@ export interface Innings {
   total_wickets: number;
   total_overs: number;
   extras: number;
+  extras_wide: number;
+  extras_noball: number;
+  extras_bye: number;
+  extras_legbye: number;
   is_completed: number;
   created_at: string;
   batting?: PlayerMatchStats[];
   bowling?: PlayerMatchStats[];
   balls?: BallEvent[];
+  fall_of_wickets?: FallOfWicket[];
+}
+
+export interface FallOfWicket {
+  wicket_number: number;
+  runs: number;
+  overs: number;
+  player_name: string;
+  player_id: number;
 }
 
 export interface BallEvent {
@@ -82,11 +124,12 @@ export interface BallEvent {
   extra_type: 'wide' | 'no-ball' | 'bye' | 'leg-bye' | null;
   extra_runs: number;
   is_wicket: number;
-  wicket_type: 'bowled' | 'caught' | 'lbw' | 'run_out' | 'stumped' | 'hit_wicket' | null;
+  wicket_type: 'bowled' | 'caught' | 'lbw' | 'run_out' | 'stumped' | 'hit_wicket' | 'retired' | null;
   dismissed_player_id: number | null;
   dismissed_player_name?: string;
   fielder_id: number | null;
   fielder_name?: string;
+  is_free_hit: number;
   created_at: string;
 }
 
@@ -108,6 +151,8 @@ export interface PlayerMatchStats {
   catches: number;
   run_outs: number;
   stumpings: number;
+  dismissal_type?: string;
+  dismissal_info?: string;
   created_at: string;
 }
 
