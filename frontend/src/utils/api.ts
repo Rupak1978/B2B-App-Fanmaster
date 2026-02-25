@@ -2,7 +2,6 @@ import { localStore } from './localStore';
 
 const BASE_URL = '/api';
 
-// Track whether the backend is available to avoid repeated failing requests.
 let backendAvailable: boolean | null = null;
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
@@ -76,6 +75,9 @@ export const api = {
     const result = await tryBackend<any>(`/matches/${id}/ball`, { method: 'POST', body: JSON.stringify(data) });
     return result ?? localStore.recordBall(id, data);
   },
+  undoLastBall: async (id: number) => {
+    return localStore.undoLastBall(id);
+  },
   startSecondInnings: async (id: number) => {
     const result = await tryBackend<any>(`/matches/${id}/second-innings`, { method: 'POST', body: JSON.stringify({}) });
     return result ?? localStore.startSecondInnings(id);
@@ -85,4 +87,5 @@ export const api = {
     return result ?? localStore.endMatch(id, data);
   },
   getScorecard: async (id: number) => (await tryBackend<any>(`/matches/${id}/scorecard`)) ?? localStore.getScorecard(id),
+  getAllPlayerStats: async () => localStore.getAllPlayerStats(),
 };
