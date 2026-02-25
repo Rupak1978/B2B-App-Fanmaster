@@ -1,0 +1,13 @@
+{
+  "name": "criclive",
+  "version": "1.0.0",
+  "description": "CricLive - Live Scoring & Stats",
+  "private": true,
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "install:all": "cd backend && npm install && cd ../frontend && npm install"
+  }
+}
