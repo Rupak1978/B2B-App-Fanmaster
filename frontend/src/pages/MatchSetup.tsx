@@ -93,9 +93,11 @@ export function MatchSetup() {
       {step === 2 && (
         <div className="space-y-4">
           <h3 className="font-semibold text-gray-800" style={{ fontSize: '16px' }}>Match Rules</h3>
+
+          {/* Overs - blank input, no preset buttons */}
           <div><label className="block font-medium text-gray-700 mb-1" style={{ fontSize: '14px' }}>Overs</label>
-            <div className="grid grid-cols-6 gap-1.5">{[2,5,8,10,15,20].map(o => <Opt key={o} active={rules.overs===o} onClick={() => updateRule('overs',o)}>{o}</Opt>)}</div>
-            <input type="number" min={1} max={50} value={rules.overs} onChange={e => updateRule('overs', Math.min(50, Math.max(1, parseInt(e.target.value)||1)))} className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg text-center" style={{ fontSize: '14px' }} /></div>
+            <input type="number" min={1} max={200} value={rules.overs || ''} onChange={e => updateRule('overs', Math.min(200, Math.max(1, parseInt(e.target.value)||1)))} placeholder="Enter overs (1-200)" className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-center focus:ring-2 focus:ring-green-500 outline-none" style={{ fontSize: '16px' }} /></div>
+
           <div><label className="block font-medium text-gray-700 mb-1" style={{ fontSize: '14px' }}>Balls per Over</label>
             <div className="grid grid-cols-4 gap-2">{[4,5,6,8].map(b => <Opt key={b} active={rules.balls_per_over===b} onClick={() => updateRule('balls_per_over',b)}>{b}</Opt>)}</div></div>
           <div><label className="block font-medium text-gray-700 mb-1" style={{ fontSize: '14px' }}>Players per Side</label>
@@ -120,12 +122,75 @@ export function MatchSetup() {
               <button onClick={() => updateRule('bouncer_limit', Math.min(rules.balls_per_over,rules.bouncer_limit+1))} className="w-11 h-11 rounded-lg bg-gray-100 font-bold hover:bg-gray-200 tap-target flex items-center justify-center">+</button>
               <span className="text-gray-500" style={{ fontSize: '14px' }}>{rules.bouncer_limit===0?'No limit':`${rules.bouncer_limit} max`}</span>
             </div></div>
+
+          {/* Toggles */}
           <div className="space-y-2">{([['no_ball_free_hit','Free Hit on No Ball'],['last_man_stands','Last Man Stands'],['super_over','Super Over for Tie']] as const).map(([key,label]) => (
             <div key={key} className="flex items-center justify-between py-2">
               <span className="text-gray-700" style={{ fontSize: '14px' }}>{label}</span>
               <button onClick={() => updateRule(key as keyof MatchRules, !(rules as any)[key])} className={`w-12 h-7 rounded-full transition-colors relative ${(rules as any)[key]?'bg-green-600':'bg-gray-300'}`}>
                 <span className="absolute top-0.5 w-6 h-6 bg-white rounded-full shadow transition-all" style={{ left: (rules as any)[key]?'22px':'2px' }} /></button>
             </div>))}</div>
+
+          {/* POWERBALL */}
+          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="font-semibold text-yellow-800" style={{ fontSize: '14px' }}>Powerball</span>
+                <p className="text-yellow-600" style={{ fontSize: '12px' }}>Specific ball: runs {rules.powerball_multiplier}X, wicket = -5</p>
+              </div>
+              <button onClick={() => updateRule('powerball_enabled', !rules.powerball_enabled)} className={`w-12 h-7 rounded-full transition-colors relative ${rules.powerball_enabled?'bg-yellow-500':'bg-gray-300'}`}>
+                <span className="absolute top-0.5 w-6 h-6 bg-white rounded-full shadow transition-all" style={{ left: rules.powerball_enabled?'22px':'2px' }} /></button>
+            </div>
+            {rules.powerball_enabled && (
+              <div className="space-y-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-yellow-700 block mb-1" style={{ fontSize: '12px' }}>Over #</label>
+                    <input type="number" min={1} max={rules.overs} value={rules.powerball_over} onChange={e => updateRule('powerball_over', Math.min(rules.overs, Math.max(1, parseInt(e.target.value)||1)))} className="w-full px-3 py-2 border border-yellow-300 rounded-lg text-center" style={{ fontSize: '14px' }} />
+                  </div>
+                  <div>
+                    <label className="text-yellow-700 block mb-1" style={{ fontSize: '12px' }}>Ball #</label>
+                    <input type="number" min={1} max={rules.balls_per_over} value={rules.powerball_ball} onChange={e => updateRule('powerball_ball', Math.min(rules.balls_per_over, Math.max(1, parseInt(e.target.value)||1)))} className="w-full px-3 py-2 border border-yellow-300 rounded-lg text-center" style={{ fontSize: '14px' }} />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-yellow-700 block mb-1" style={{ fontSize: '12px' }}>Multiplier</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Opt active={rules.powerball_multiplier===2} onClick={() => updateRule('powerball_multiplier',2)}>2X</Opt>
+                    <Opt active={rules.powerball_multiplier===3} onClick={() => updateRule('powerball_multiplier',3)}>3X</Opt>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* POWER OVER */}
+          <div className="bg-orange-50 border border-orange-200 rounded-xl p-3 space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="font-semibold text-orange-800" style={{ fontSize: '14px' }}>Power Over</span>
+                <p className="text-orange-600" style={{ fontSize: '12px' }}>Entire over: runs {rules.power_over_multiplier}X, wicket = -5</p>
+              </div>
+              <button onClick={() => updateRule('power_over_enabled', !rules.power_over_enabled)} className={`w-12 h-7 rounded-full transition-colors relative ${rules.power_over_enabled?'bg-orange-500':'bg-gray-300'}`}>
+                <span className="absolute top-0.5 w-6 h-6 bg-white rounded-full shadow transition-all" style={{ left: rules.power_over_enabled?'22px':'2px' }} /></button>
+            </div>
+            {rules.power_over_enabled && (
+              <div className="space-y-2">
+                <div>
+                  <label className="text-orange-700 block mb-1" style={{ fontSize: '12px' }}>Over #</label>
+                  <input type="number" min={1} max={rules.overs} value={rules.power_over_number} onChange={e => updateRule('power_over_number', Math.min(rules.overs, Math.max(1, parseInt(e.target.value)||1)))} className="w-full px-3 py-2 border border-orange-300 rounded-lg text-center" style={{ fontSize: '14px' }} />
+                </div>
+                <div>
+                  <label className="text-orange-700 block mb-1" style={{ fontSize: '12px' }}>Multiplier</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Opt active={rules.power_over_multiplier===2} onClick={() => updateRule('power_over_multiplier',2)}>2X</Opt>
+                    <Opt active={rules.power_over_multiplier===3} onClick={() => updateRule('power_over_multiplier',3)}>3X</Opt>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
           <div className="flex gap-3">
             <button onClick={() => setStep(1)} className="flex-1 py-3 rounded-lg font-semibold border border-gray-300 text-gray-600 hover:bg-gray-50 tap-target" style={{ fontSize: '14px' }}>Back</button>
             <button onClick={() => setStep(3)} className="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold tap-target" style={{ fontSize: '14px' }}>Next: {form.team1_name}</button>
@@ -185,6 +250,8 @@ export function MatchSetup() {
             <p className="font-semibold text-gray-900" style={{ fontSize: '14px' }}>{form.team1_name} vs {form.team2_name}</p>
             <p className="text-gray-500" style={{ fontSize: '14px' }}>{rules.overs} ov | {rules.balls_per_over} balls/ov | {rules.players_per_side} a side</p>
             <p className="text-gray-500" style={{ fontSize: '14px' }}>Wide: {rules.wide_runs}r | Free hit: {rules.no_ball_free_hit?'Yes':'No'} | LMS: {rules.last_man_stands?'Yes':'No'}</p>
+            {rules.powerball_enabled && <p className="text-yellow-700 font-medium" style={{ fontSize: '14px' }}>Powerball: Over {rules.powerball_over} Ball {rules.powerball_ball} ({rules.powerball_multiplier}X)</p>}
+            {rules.power_over_enabled && <p className="text-orange-700 font-medium" style={{ fontSize: '14px' }}>Power Over: Over {rules.power_over_number} ({rules.power_over_multiplier}X)</p>}
           </div>
           <div className="flex gap-3">
             <button onClick={() => setStep(4)} className="flex-1 py-3 rounded-lg font-semibold border border-gray-300 text-gray-600 hover:bg-gray-50 tap-target" style={{ fontSize: '14px' }}>Back</button>

@@ -8,6 +8,13 @@ export interface MatchRules {
   bouncer_limit: number;
   last_man_stands: boolean;
   super_over: boolean;
+  powerball_enabled: boolean;
+  powerball_over: number;
+  powerball_ball: number;
+  powerball_multiplier: 2 | 3;
+  power_over_enabled: boolean;
+  power_over_number: number;
+  power_over_multiplier: 2 | 3;
 }
 
 export const DEFAULT_RULES: MatchRules = {
@@ -20,6 +27,13 @@ export const DEFAULT_RULES: MatchRules = {
   bouncer_limit: 0,
   last_man_stands: false,
   super_over: false,
+  powerball_enabled: false,
+  powerball_over: 1,
+  powerball_ball: 1,
+  powerball_multiplier: 2,
+  power_over_enabled: false,
+  power_over_number: 1,
+  power_over_multiplier: 2,
 };
 
 export interface Tournament {

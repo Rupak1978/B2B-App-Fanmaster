@@ -7,6 +7,8 @@ import { CreateTournament } from './pages/CreateTournament';
 import { Score } from './pages/Score';
 import { MatchSetup } from './pages/MatchSetup';
 import { LiveScoring } from './pages/LiveScoring';
+import { AudienceScreen } from './pages/AudienceScreen';
+import { AdminDashboard } from './pages/AdminDashboard';
 import { Players, PlayerDetail } from './pages/Players';
 import { Records } from './pages/Records';
 import { setCurrentUser } from './utils/localStore';
@@ -85,23 +87,30 @@ export default function App() {
     setUser(null);
   };
 
-  if (!user) return <LoginScreen onLogin={handleLogin} />;
-
   return (
     <HashRouter>
       <Routes>
-        <Route element={<Layout user={user} onLogout={handleLogout} />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/tournaments" element={<Tournaments />} />
-          <Route path="/tournaments/create" element={<CreateTournament />} />
-          <Route path="/tournaments/:id" element={<TournamentDetail />} />
-          <Route path="/score" element={<Score />} />
-          <Route path="/score/setup" element={<MatchSetup />} />
-          <Route path="/score/:id" element={<LiveScoring />} />
-          <Route path="/players" element={<Players />} />
-          <Route path="/players/:id" element={<PlayerDetail />} />
-          <Route path="/records" element={<Records />} />
-        </Route>
+        {/* Public routes - no login needed */}
+        <Route path="/live/:matchId" element={<AudienceScreen />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+
+        {/* Protected routes */}
+        {!user ? (
+          <Route path="*" element={<LoginScreen onLogin={handleLogin} />} />
+        ) : (
+          <Route element={<Layout user={user} onLogout={handleLogout} />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/tournaments" element={<Tournaments />} />
+            <Route path="/tournaments/create" element={<CreateTournament />} />
+            <Route path="/tournaments/:id" element={<TournamentDetail />} />
+            <Route path="/score" element={<Score />} />
+            <Route path="/score/setup" element={<MatchSetup />} />
+            <Route path="/score/:id" element={<LiveScoring />} />
+            <Route path="/players" element={<Players />} />
+            <Route path="/players/:id" element={<PlayerDetail />} />
+            <Route path="/records" element={<Records />} />
+          </Route>
+        )}
       </Routes>
     </HashRouter>
   );
