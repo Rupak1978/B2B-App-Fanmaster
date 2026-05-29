@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ScoreCard } from '../components/ScoreCard';
+import { Scoreboard } from '../components/Scoreboard';
 import { BoundaryCelebration } from '../components/BoundaryCelebration';
 import { Innings, BallEvent } from '../types';
 
@@ -107,6 +108,17 @@ export function AudienceScreen() {
             <span>{match?.overs} ov match</span>
           </div>
         </div>
+
+        {/* Scoreboard Overview */}
+        {sc.innings && sc.innings.length > 0 && (
+          <div className="bg-white rounded-xl border border-gray-200 p-4">
+            <Scoreboard
+              innings={sc.innings}
+              match={match}
+              compact={true}
+            />
+          </div>
+        )}
 
         {/* This Over */}
         <div className="bg-white rounded-xl border border-gray-200 p-3">
