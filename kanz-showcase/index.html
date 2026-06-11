@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanz Enterprises — The Designer Fan Sphere</title>
+  <meta name="description" content="Explore the Kanz Enterprises designer fan collection in an immersive 3D sphere. Chandelier, bladeless, wooden and retractable BLDC fans — spin them, restyle them, fall for them." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>🌀</text></svg>" />
+</head>
+<body>
+
+  <!-- ambient particle dust -->
+  <canvas id="dust" aria-hidden="true"></canvas>
+
+  <!-- intro -->
+  <div id="intro" aria-hidden="true">
+    <div class="intro-ring"></div>
+    <div class="intro-word">KANZ</div>
+    <div class="intro-sub">EVERYTHING&nbsp;DESIGNER</div>
+  </div>
+
+  <!-- header -->
+  <header id="topbar">
+    <div class="brand">
+      <span class="brand-mark">K</span>
+      <span class="brand-name">KANZ <em>ENTERPRISES</em></span>
+    </div>
+    <nav>
+      <button class="nav-link" data-goto="sphere">Collection</button>
+      <button class="nav-link" data-goto="about">About</button>
+      <a class="nav-cta" id="hdr-enquire" href="#" target="_blank" rel="noopener">Enquire&nbsp;↗</a>
+    </nav>
+  </header>
+
+  <!-- hero copy -->
+  <section id="hero">
+    <h1><span>The Ceiling</span> is the new <span>Centrepiece</span></h1>
+    <p>Nine signature BLDC designer fans. One sphere. Drag to orbit — tap a fan to bring it to life.</p>
+  </section>
+
+  <!-- the sphere stage -->
+  <main id="stage" aria-label="3D fan collection">
+    <div id="sphere-viewport">
+      <div id="sphere"><!-- cards injected --></div>
+    </div>
+
+    <!-- focused model HUD -->
+    <div id="hud">
+      <div class="hud-line" id="hud-name">—</div>
+      <div class="hud-sub"><span id="hud-price"></span><span class="hud-hint">tap to explore</span></div>
+    </div>
+
+    <div id="drag-coach" aria-hidden="true">
+      <span class="coach-arrow">‹</span> drag <span class="coach-arrow">›</span>
+    </div>
+  </main>
+
+  <!-- model picker dock -->
+  <nav id="dock" aria-label="Model picker">
+    <button class="dock-arrow" id="dock-prev" aria-label="Previous model">‹</button>
+    <div id="dock-items"><!-- injected --></div>
+    <button class="dock-arrow" id="dock-next" aria-label="Next model">›</button>
+  </nav>
+
+  <!-- product detail overlay -->
+  <section id="detail" aria-hidden="true">
+    <button id="detail-close" aria-label="Back to collection">‹ &nbsp;Collection</button>
+
+    <div class="detail-grid">
+      <div class="detail-stage">
+        <div class="stage-glow" aria-hidden="true"></div>
+        <div id="fan-tilt">
+          <div id="fan-holder"><!-- big SVG injected --></div>
+        </div>
+
+        <div class="stage-tools">
+          <button class="tool" id="tool-power" title="Power"><span class="tool-ico">⏻</span><span>Power</span></button>
+          <div class="tool tool-speed">
+            <span>Speed</span>
+            <input type="range" id="tool-speed" min="1" max="5" value="3" aria-label="Fan speed" />
+          </div>
+          <button class="tool" id="tool-light" title="Light"><span class="tool-ico">✦</span><span>Light</span></button>
+          <button class="tool" id="tool-zoom" title="Zoom"><span class="tool-ico">⤢</span><span>Zoom</span></button>
+        </div>
+        <div class="stage-tip">drag the fan to tilt · scroll to zoom</div>
+      </div>
+
+      <div class="detail-info">
+        <div class="d-line" id="d-line">REGALE</div>
+        <h2 id="d-alias">—</h2>
+        <div class="d-model" id="d-model">—</div>
+        <p class="d-desc" id="d-desc"></p>
+
+        <div class="d-price-row">
+          <span class="d-price" id="d-price"></span>
+          <span class="d-mrp" id="d-mrp"></span>
+          <span class="d-save" id="d-save"></span>
+        </div>
+        <div class="d-emi" id="d-emi"></div>
+
+        <div class="d-finishes">
+          <div class="d-label">FINISH — <span id="d-finish-name"></span></div>
+          <div id="d-swatches"></div>
+        </div>
+
+        <div class="d-specs" id="d-specs"></div>
+
+        <div class="d-ctas">
+          <a class="cta cta-buy" id="cta-buy" href="#" target="_blank" rel="noopener">Reserve this fan</a>
+          <a class="cta cta-wa" id="cta-wa" href="#" target="_blank" rel="noopener">WhatsApp us</a>
+        </div>
+
+        <ul class="d-trust">
+          <li>⚡ BLDC — runs on ~50% less power</li>
+          <li>🛡 2-year on-site warranty</li>
+          <li>📦 Pan-India insured delivery</li>
+          <li>🤍 Loved by architects &amp; designers</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- fullscreen zoom layer -->
+    <div id="zoom-layer" aria-hidden="true">
+      <div id="zoom-canvas"></div>
+      <div class="zoom-tip">scroll / pinch to zoom · drag to pan · click ✕ to exit</div>
+      <button id="zoom-close" aria-label="Exit zoom">✕</button>
+    </div>
+  </section>
+
+  <!-- about strip -->
+  <section id="about">
+    <h3>Designed in Mumbai. Engineered for silence.</h3>
+    <p>Since 2016, Kanz Enterprises has curated India's most distinctive ceiling fans —
+       chandelier, bladeless, wooden and retractable silhouettes under the
+       <strong>REGALE</strong> and <strong>FanCy</strong> lines, all powered by
+       whisper-quiet BLDC motors that sip half the electricity.</p>
+  </section>
+
+  <footer>
+    <span>© Kanz Enterprises · Mumbai</span>
+    <span class="foot-dot">·</span>
+    <a id="foot-mail" href="#">Write to us</a>
+  </footer>
+
+  <script src="js/catalog.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
